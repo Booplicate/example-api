@@ -140,7 +140,8 @@ class UsersEndpointTestCase(unittest.TestCase):
 
                         self.assertEqual(response.status_code, 404)
 
-        with self.subTest("Test invalid credentials"):
+        # TODO: test invalid credentials
+        with self.subTest("Test no credentials"):
             with patch("example_api.services.update_user", update_db_user_valid_mock):
                 response = self.client.put(
                     self.ENDPOINT + "/75",
