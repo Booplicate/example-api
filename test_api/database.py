@@ -66,11 +66,11 @@ def init():
     global engine, SessionFactory
 
     try:
-        db_user = os.environ["DB_USER"]
-        db_password = os.environ["DB_PASSWORD"]
-        db_host = os.environ["DB_HOST"]
-        db_port = os.environ["DB_PORT"]
-        db_name = os.environ["DB_NAME"]
+        db_user = os.environ["PGUSER"]
+        db_password = os.environ["PGPASSWORD"]
+        db_host = os.environ["PGHOST"]
+        db_port = os.environ["PGPORT"]
+        db_name = os.environ["PGDATABASE"]
 
     except KeyError as e:
         raise RuntimeError(f"Missing required enviroment variable: {e}") from None
