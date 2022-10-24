@@ -5,9 +5,17 @@ services:
   app:
     build: ./
     ports:
-      - "5050:5050"
-    env_file:
-      - app.env
+      - "${APP_PORT}:${APP_PORT}"
+    environment:
+      - APP_HOST
+      - APP_PORT
+      - PGUSER
+      - PGPASSWORD
+      - PGDATABASE
+      - PGHOST
+      - PGPORT
+    # env_file:
+    #   - app.env
     depends_on:
       # - "sql_db"
       sql_db:
@@ -17,11 +25,17 @@ services:
     image: postgres:13
     restart: always
     ports:
-      - "5070:5070"
+      - "${PGPORT}:${PGPORT}"
+    environment:
+      - PGUSER
+      - PGPASSWORD
+      - PGDATABASE
+      - PGHOST
+      - PGPORT
     volumes:
       - db-data:/var/lib/postgresql/data
-    env_file:
-      - sql_db.env
+    # env_file:
+    #   - sql_db.env
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "admin", "-d", "main_db"]
       interval: 5s
