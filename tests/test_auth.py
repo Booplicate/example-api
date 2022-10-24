@@ -42,8 +42,10 @@ class AsyncAuthTestCase(unittest.IsolatedAsyncioTestCase):
             mock_sesh_factory.return_value = mock_sesh_ctx_manager
 
             with self.subTest("Test non-exiting user"):
-                with self.assertRaises(HTTPException):
+                with self.assertRaises(HTTPException) as e:
                     await verify_credentials(identifier, crdn)
+
+                self.assertEqual(e.exception.status_code, 404)
 
             mock_sesh.get.return_value = mock_db_user# Non-None means found in the db
 
@@ -57,10 +59,14 @@ class AsyncAuthTestCase(unittest.IsolatedAsyncioTestCase):
 
                     with self.subTest("Test wrong password"):
                         with patch.object(mock_db_user, "password", wrong_str):
-                            with self.assertRaises(HTTPException):
+                            with self.assertRaises(HTTPException) as e:
                                 await verify_credentials(identifier, crdn)
+
+                            self.assertEqual(e.exception.status_code, 401)
 
                     with self.subTest("Test wrong username"):
                         with patch.object(mock_db_user, "name", wrong_str):
-                            with self.assertRaises(HTTPException):
+                            with self.assertRaises(HTTPException) as e:
                                 await verify_credentials(identifier, crdn)
+
+                            self.assertEqual(e.exception.status_code, 401)
