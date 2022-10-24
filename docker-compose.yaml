@@ -14,10 +14,7 @@ services:
       - PGDATABASE
       - PGHOST
       - PGPORT
-    # env_file:
-    #   - app.env
     depends_on:
-      # - "sql_db"
       sql_db:
         condition: service_healthy
 
@@ -34,8 +31,6 @@ services:
       - PGPORT
     volumes:
       - db-data:/var/lib/postgresql/data
-    # env_file:
-    #   - sql_db.env
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "admin", "-d", "main_db"]
       interval: 5s
