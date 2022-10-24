@@ -1,6 +1,6 @@
 # [example-api](https://github.com/Booplicate/example-api) - an example API
 
-The code in this repository is for education purposes only. An example on how to create a RESTfull service using `FastAPI` and `PostgreSQL`.
+The code in this repository is for educational purposes only. An example on how to create a RESTful service using `FastAPI` and `PostgreSQL`.
 
 
 ### Environment variables:
