@@ -3,13 +3,15 @@ Module with the routes for the API
 """
 
 import fastapi
+from fastapi import Depends
 
 from .models import (
     UserModelIn,
     UserModelOut
 )
 from . import (
-    services
+    services,
+    auth
 )
 
 
@@ -20,7 +22,11 @@ router_v1 = fastapi.APIRouter(prefix="/users")
 async def create_user(user: UserModelIn):
     return await services.create_user(user.dict())
 
-@router_v1.put("/{identifier}", response_model=UserModelOut)
+@router_v1.put(
+    "/{identifier}",
+    response_model=UserModelOut,
+    dependencies=[Depends(auth.verify_credentials)]
+)
 async def update_user(identifier: int, user: UserModelIn):
     db_data = await services.update_user(identifier, user.dict())
     if db_data is None:
