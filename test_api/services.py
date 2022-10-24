@@ -11,13 +11,13 @@ from .database import (
     User
 )
 from . import encoder
+from . import utils
 
 
 def _preprocess_user_data(user_data: dict):
     """
     Preprocessing user data before adding it
     to the db
-    Modifies in place
     """
     if "password" in user_data:
         user_data["password"] = encoder.hash_string(
@@ -28,7 +28,6 @@ def _preprocess_new_user_data(user_data: dict):
     """
     Preprocessing NEW user data before adding it
     to the db
-    Modifies in place
     """
     _preprocess_user_data(user_data)
 
@@ -47,6 +46,8 @@ async def create_user(user_data: dict) -> User:
         db_user = User(**user_data)
         sesh.add(db_user)
         await sesh.commit()
+
+    get_user.clear_key(db_user.identifier)# type: ignore
 
     return db_user
 
@@ -76,8 +77,11 @@ async def update_user(identifier: int, new_user_data: dict) -> User|None:
         res = await sesh.execute(stmt)
         db_user = res.scalar()
 
+    get_user.clear_key(identifier)# type: ignore
+
     return db_user
 
+@utils.create_async_cache(1024**2)
 async def get_user(identifier: int) -> User|None:
     """
     Returns a user from the db
