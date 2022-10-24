@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 
 COPY . ./
 
-EXPOSE 5050
+EXPOSE ${APP_PORT}
 
-CMD ["python", "-m", "test_api", "0.0.0.0", "5050"]
+CMD ["python", "-m", "test_api"]
