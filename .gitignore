@@ -5,5 +5,4 @@ __pycache__
 venv
 logs
 
-sql_db.env
-app.env
+*.env
