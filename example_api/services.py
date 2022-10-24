@@ -24,7 +24,7 @@ def _preprocess_user_data(user_data: dict):
             user_data["password"]
         )
 
-def _preprocess_new_user_data(user_data: dict):
+def _preprocess_new_user_data(user_data: dict, *, now_utc_dt: datetime.datetime|None = None):
     """
     Preprocessing NEW user data before adding it
     to the db
@@ -33,7 +33,9 @@ def _preprocess_new_user_data(user_data: dict):
 
     if "created_at" not in user_data:
         # NOTE: Unaware dt
-        user_data["created_at"] = datetime.datetime.utcnow()
+        if now_utc_dt is None:
+            now_utc_dt = datetime.datetime.utcnow()
+        user_data["created_at"] = now_utc_dt
 
 
 async def create_user(user_data: dict) -> User:
