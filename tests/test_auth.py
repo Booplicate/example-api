@@ -21,13 +21,6 @@ class AsyncAuthTestCase(unittest.IsolatedAsyncioTestCase):
         password = "Mock Password"
         wrong_str = "wrong"
 
-        def print_and_return(txt, rv):
-            def inner():
-                print(txt)
-                return rv
-
-            return inner
-
         mock_db_user = MagicMock()
         mock_db_user.identifier = identifier
         mock_db_user.name = name

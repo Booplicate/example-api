@@ -20,6 +20,7 @@ router_v1 = fastapi.APIRouter(prefix="/users")
 
 @router_v1.post("", response_model=UserModelOut, status_code=201)
 async def create_user(user: UserModelIn):
+    # TODO: check name and pw length (too short/too long)
     return await services.create_user(user.dict())
 
 @router_v1.put(
