@@ -9,9 +9,12 @@ services:
     environment:
       - APP_HOST
       - APP_PORT
-      - PGUSER
-      - PGPASSWORD
-      - PGDATABASE
+      # - PGUSER
+      # - PGPASSWORD
+      # - PGDATABASE
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
       - PGHOST
       - PGPORT
     depends_on:
@@ -24,15 +27,18 @@ services:
     ports:
       - "${PGPORT}:${PGPORT}"
     environment:
-      - PGUSER
-      - PGPASSWORD
-      - PGDATABASE
+      # - PGUSER
+      # - PGPASSWORD
+      # - PGDATABASE
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
       - PGHOST
       - PGPORT
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "admin", "-d", "main_db"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 15

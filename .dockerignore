@@ -4,3 +4,7 @@ __pycache__
 
 venv
 logs
+tmp.txt
+
+*.env
+run_tests.bat
