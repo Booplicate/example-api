@@ -8,7 +8,7 @@ import datetime
 from pydantic import BaseModel# pylint: disable=no-name-in-module
 
 
-class _UserModelBase(BaseModel):# pylint: disable=no-member
+class _UserModelBase(BaseModel):
     name: str
 
 class UserModelIn(_UserModelBase):
@@ -19,9 +19,6 @@ class UserModelIn(_UserModelBase):
         password
     """
     password: str
-
-    # class Config:
-    #     orm_mode = True
 
 class UserModelOut(_UserModelBase):
     """
@@ -34,17 +31,5 @@ class UserModelOut(_UserModelBase):
     identifier: int
     created_at: datetime.datetime
 
-    class Config:
-        orm_mode = True
-
-class UserModel(UserModelIn, UserModelOut):
-    """
-    A model representing user data we use internally
-
-    Extra requirement:
-        password
-        identifier
-        created_at
-    """
     class Config:
         orm_mode = True
