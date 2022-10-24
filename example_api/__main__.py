@@ -8,11 +8,11 @@ import os
 import uvicorn
 
 
-APP_NAME = "test_api.application:main_app"
+APP_NAME = "example_api.application:main_app"
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser(prog="test_api", description="An example API")
+    parser = argparse.ArgumentParser(prog="example_api", description="An example API")
     parser.add_argument("--host", default=None, help="server address")
     parser.add_argument("--port", default=None, type=int, help="server port")
 

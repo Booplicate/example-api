@@ -12,4 +12,4 @@ COPY . ./
 
 EXPOSE ${APP_PORT}
 
-CMD ["python", "-m", "test_api"]
+CMD ["python", "-m", "example_api"]

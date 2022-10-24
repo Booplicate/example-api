@@ -9,8 +9,8 @@ from contextlib import contextmanager
 
 from fastapi.testclient import TestClient
 
-from test_api.application import app_v1
-from test_api import (
+from example_api.application import app_v1
+from example_api import (
     database,
     models,
     auth
@@ -79,7 +79,7 @@ class UsersEndpointTestCase(unittest.TestCase):
 
     def test_create_user(self):
         with self.subTest("Test valid user"):
-            with patch("test_api.services.create_user", create_db_user_mock):
+            with patch("example_api.services.create_user", create_db_user_mock):
                 user_data = _generate_user_data()
                 response = self.client.post(
                     self.ENDPOINT,
@@ -93,7 +93,7 @@ class UsersEndpointTestCase(unittest.TestCase):
                 self.assertEqual(response.status_code, 201)
 
         with self.subTest("Test invalid user"):
-            with patch("test_api.services.create_user", create_db_user_mock):
+            with patch("example_api.services.create_user", create_db_user_mock):
                 response = self.client.post(
                     self.ENDPOINT,
                     json={}
@@ -109,7 +109,7 @@ class UsersEndpointTestCase(unittest.TestCase):
                 verify_credentials_mock
             ):
                 with self.subTest("Test valid user"):
-                    with patch("test_api.services.update_user", update_db_user_valid_mock):
+                    with patch("example_api.services.update_user", update_db_user_valid_mock):
                         user_data = _generate_user_data()
                         response = self.client.put(
                             self.ENDPOINT + "/75",
@@ -123,7 +123,7 @@ class UsersEndpointTestCase(unittest.TestCase):
                         self.assertEqual(response.status_code, 200)
 
                 with self.subTest("Test invalid user"):
-                    with patch("test_api.services.update_user", update_db_user_valid_mock):
+                    with patch("example_api.services.update_user", update_db_user_valid_mock):
                         response = self.client.put(
                             self.ENDPOINT + "/75",
                             json={}
@@ -132,7 +132,7 @@ class UsersEndpointTestCase(unittest.TestCase):
                         self.assertEqual(response.status_code, 422)
 
                 with self.subTest("Test non-existing user"):
-                    with patch("test_api.services.update_user", update_db_user_invalid_mock):
+                    with patch("example_api.services.update_user", update_db_user_invalid_mock):
                         response = self.client.put(
                             self.ENDPOINT + "/75",
                             json=_generate_user_data()
@@ -141,7 +141,7 @@ class UsersEndpointTestCase(unittest.TestCase):
                         self.assertEqual(response.status_code, 404)
 
         with self.subTest("Test invalid credentials"):
-            with patch("test_api.services.update_user", update_db_user_valid_mock):
+            with patch("example_api.services.update_user", update_db_user_valid_mock):
                 response = self.client.put(
                     self.ENDPOINT + "/75",
                     json=_generate_user_data()
@@ -151,7 +151,7 @@ class UsersEndpointTestCase(unittest.TestCase):
 
     def test_get_user(self):
         with self.subTest("Test existing user"):
-            with patch("test_api.services.get_user", get_db_user_valid_mock):
+            with patch("example_api.services.get_user", get_db_user_valid_mock):
                 response = self.client.get(
                     self.ENDPOINT + "/75"
                 )
@@ -162,7 +162,7 @@ class UsersEndpointTestCase(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
 
         with self.subTest("Test non-existin user"):
-            with patch("test_api.services.get_user", get_db_user_invalid_mock):
+            with patch("example_api.services.get_user", get_db_user_invalid_mock):
                 response = self.client.get(
                     self.ENDPOINT + "/75"
                 )
