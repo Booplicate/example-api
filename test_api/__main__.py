@@ -7,8 +7,6 @@ import os
 
 import uvicorn
 
-from . import database
-
 
 APP_NAME = "test_api.application:main_app"
 
@@ -38,8 +36,6 @@ def main():
     """
     args = _parse_args()
     host, port = _get_host_port(args)
-
-    database.init()
 
     config = uvicorn.Config(APP_NAME, host=host, port=port)
     server = uvicorn.Server(config)

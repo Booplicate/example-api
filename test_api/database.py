@@ -27,7 +27,6 @@ from sqlalchemy.orm import (
 )
 
 
-SYNC_ENGINE_URL = "postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 ASYNC_ENGINE_URL_FMT = "postgresql+asyncpg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
 engine: sqlalchemy.ext.asyncio.AsyncEngine|None = None
@@ -59,18 +58,18 @@ class User(Base):# type: ignore
 # users_table: Table = User.__table__
 
 
-def init():
+async def init():
     """
     Inits the database
     """
     global engine, SessionFactory
 
     try:
-        db_user = os.environ["PGUSER"]
-        db_password = os.environ["PGPASSWORD"]
+        db_user = os.environ["POSTGRES_USER"]
+        db_password = os.environ["POSTGRES_PASSWORD"]
         db_host = os.environ["PGHOST"]
         db_port = os.environ["PGPORT"]
-        db_name = os.environ["PGDATABASE"]
+        db_name = os.environ["POSTGRES_DB"]
 
     except KeyError as e:
         raise RuntimeError(f"Missing required enviroment variable: {e}") from None
@@ -92,18 +91,17 @@ def init():
         future=True
     )
 
-    # TODO: perhaps move this to the app callbacks
-    _sync_engine = create_engine(
-        SYNC_ENGINE_URL.format(
-            db_user=db_user,
-            db_password=db_password,
-            db_host=db_host,
-            db_port=db_port,
-            db_name=db_name
-        ),
-        future=True
-    )
-    metadata.create_all(_sync_engine)
+    async with engine.begin() as conn:
+        await conn.run_sync(metadata.create_all)
+
+async def deinit():
+    """
+    Closes db connection once and for all
+    """
+    global engine, SessionFactory
+
+    await engine.dispose()
+    engine = SessionFactory = None
 
 def new_session(**kwargs) -> AsyncSession:
     """
