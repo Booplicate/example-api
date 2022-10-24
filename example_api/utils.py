@@ -39,7 +39,7 @@ def create_async_cache(max_size: int) -> Callable[[Callable[P, Awaitable[R]]], C
             # Check if new key
             if k not in cache:
                 # Check if over limit
-                if len(cache) > max_size:
+                if len(cache) >= max_size:
                     cache.popitem(last=False)
 
                 cache[k] = await func(*args, **kwargs)
@@ -52,11 +52,11 @@ def create_async_cache(max_size: int) -> Callable[[Callable[P, Awaitable[R]]], C
             """
             cache.clear()
 
-        def clear_key(key):
+        def clear_key(*args, **kwargs):
             """
             Clears cache for a key
             """
-            cache.pop(key, None)
+            cache.pop(make_key(args, kwargs, False), None)
 
         setattr(wrapper, "__wrapped__", func)
         setattr(wrapper, "__cache__", cache)
