@@ -4,4 +4,7 @@ uvicorn
 sqlalchemy
 psycopg2
 asyncpg
+
 pydantic
+
+passlib[bcrypt]
